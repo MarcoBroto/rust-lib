@@ -1,5 +1,5 @@
-use project::test_forest;
+use project::test_red_black_tree;
 
 fn main() {
-    test_forest();
+    test_red_black_tree()
 }
