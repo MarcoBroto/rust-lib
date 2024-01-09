@@ -1,6 +1,8 @@
 use std::cmp::Ordering;
 
-type RBTreeNodeType<K> = Option<Box<RBTreeNode<K>>>;
+type RBTreeNodeType<T> = Option<Box<RBTreeNode<T>>>; // Type alias for wrapped Red Black Tree Node
+
+enum RBTreeRotation { LL, LR, RR, RL }
 
 #[derive(Debug)]
 struct RBTreeNode<K: Ord> {
@@ -33,49 +35,49 @@ impl<K: Ord> RBTree<K> {
 			return
 		}
 
-		let mut head = &mut self.root;
+		// Traverse tree and insert new node if key does not already exist in tree
+		let mut rotations: Vec<RBTreeRotation> = Vec::default();
+		let mut path: Vec<&mut RBTreeNodeType<K>> = Vec::default();
 
+		let mut head = &mut self.root; // Stores current traversal node position
 		while let Some(ref mut curr) = head {
 			match curr.key.cmp(&key) {
 				Ordering::Equal => return, // Key already exists in tree
-				Ordering::Greater => {
+				Ordering::Greater => // Current node is greater than insertion key, traverse left
 					match curr.left {
-						Some(_) => { head = &mut curr.left; },
-						None => {
+						Some(_) => { head = &mut curr.left; }, // Traverse existing right child branch path
+						None => { // No child exists, insert key
 							curr.left = Some(Box::new(RBTreeNode::new(key, false)));
 							break;
 						},
-					}
-				},
-				Ordering::Less => {
+					},
+				Ordering::Less =>  // Current node is less than insertion key, traverse right
 					match &curr.right {
-						Some(_) => { head = &mut curr.right; },
-						None => {
+						Some(_) => { head = &mut curr.right; }, // Traverse existing left child branch path
+						None => { // No child exists, insert key
 							curr.right = Some(Box::new(RBTreeNode::new(key, false)));
 							break;
 						},
 					}
-				}
 			}
 		}
 
-		self.rebalance()
+		// TODO: Fix tree violations
 	}
 
 	pub fn remove(&mut self, _: K) {
 		// TODO: Implement delete value instance method
 	}
 
-	fn rotate_left(&mut self, pivot: RBTreeNode<K>) {
-		// TODO: Implement left rotation instance method
-	}
+	fn rotate(&mut self, rotation: RBTreeRotation ) {
+		// TODO: Implement rotation method
 
-	fn rotate_right(&mut self, pivot: RBTreeNode<K>) {
-		// TODO: Implement right rotation instance method
-	}
-
-	fn rebalance(&mut self) {
-		// TODO: Implement rebalance tree instance method
+		match rotation {
+			RBTreeRotation::LL => {},
+			RBTreeRotation::LR => {},
+			RBTreeRotation::RR => {},
+			RBTreeRotation::RL => {},
+		}
 	}
 
 	pub fn from_vec(vec: Vec<K>) -> RBTree<K> {
@@ -91,6 +93,7 @@ impl<K: Ord> RBTree<K> {
 	}
 
 	pub fn is_valid_tree(tree: &RBTree<K>) -> bool {
+		// TODO: Implement black node depth check validation
 		if let Some(root) = &tree.root {
 			if !root.is_black { return false }
 

@@ -10,5 +10,3 @@ pub use search::*;
 
 // Unit Test Module Definitions
 mod rb_tree_test;
-
-pub use rb_tree_test::*;
